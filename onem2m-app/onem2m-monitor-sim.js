@@ -5,7 +5,7 @@ var aeName = "monitor1";
 // var aeIp = "127.0.0.1";
 var aeIp = "192.168.86.235";
 var aePort = 4000;
-var sensorContainer = "/server/luminosity_0/data";
+var sensorContainer = "/server/recycling_0/data";
 var actuatorContainer = "/server/lamp_0/data";
 //////////////////////////////////////////
 
@@ -31,21 +31,24 @@ app.post('/', function (req, res) {
 
 // jayden.choe		
 	console.log("Receieved Detected Type of the recycling product: "+content);
+// just in case of bottle, LED ON to indicate that it would be a target of recycling	
+	if ( content == "bottle" ) {
+		console.log("LED ON to indicate the bottle");
+		led_on();
+	} else {
+		led_off();
+	}
 
 ////////////////////////////
 
-
-
-
-
 /*
-	console.log("Receieved luminosity: "+content);
+	console.log("Receieved recycling: "+content);
 	if(content>300 && ledON==1 ){
-		console.log("High luminosity => Switch lamp to 0");
+		console.log("High recycling => Switch lamp to 0");
 		createContenInstance("0");
 		ledON=0;
 	}else if(content<=300 && ledON==0){
-		console.log("Low luminosity => Switch lamp to 1");
+		console.log("Low recycling => Switch lamp to 1");
 		createContenInstance("1")
 		ledON=1;
 	}else{
@@ -134,7 +137,7 @@ function resetAE(){
 function createSubscription(){
 	console.log("\n[REQUEST]");
 	var method = "POST";
-	var uri= cseUri+sensorContainer; // subscription to luminosity_0 to get the notification
+	var uri= cseUri+sensorContainer; // subscription to recycling_0 to get the notification
 	var resourceType=23;
 	var requestId = Math.floor(Math.random() * 10000);
 	var representation = {
@@ -208,4 +211,24 @@ function createContenInstance(value){
 			console.log(body);
 		}
 	});
+}
+
+function led_on() {
+	const { Gpio } = require( 'onoff' );
+
+	// set BCM 4 pin as 'output'
+	const ledOut = new Gpio( '17', 'out' );
+	
+	// current LED state
+	ledOut.writeSync(1);
+}
+
+function led_off() {
+	const { Gpio } = require( 'onoff' );
+
+	// set BCM 4 pin as 'output'
+	const ledOut = new Gpio( '17', 'out' );
+	
+	// current LED state
+	ledOut.writeSync(0);
 }
