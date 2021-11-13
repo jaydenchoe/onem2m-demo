@@ -35,6 +35,8 @@ app.post('/', function (req, res) {
 	if ( content == "bottle" ) {
 		console.log("LED ON to indicate the bottle");
 		led_on();
+		console.log("Servo ON to move the bottle");
+		servo_on();
 	} else {
 		led_off();
 	}
@@ -231,4 +233,11 @@ function led_off() {
 	
 	// current LED state
 	ledOut.writeSync(0);
+}
+
+function servo_on() {
+	var Piservo = require('pi-servo');
+    var sv1 = new Piservo(18);
+	sv1.open();
+	sv1.setDegree(20);
 }
