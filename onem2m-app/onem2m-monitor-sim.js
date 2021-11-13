@@ -1,8 +1,9 @@
 ///////////////Parameters/////////////////
-var cseUri = "http://127.0.0.1:8080";
+var cseUri = "http://192.168.86.192:8080";
 var aeId = "Cae-monitor1"
 var aeName = "monitor1";
-var aeIp = "127.0.0.1";
+// var aeIp = "127.0.0.1";
+var aeIp = "192.168.86.235";
 var aePort = 4000;
 var sensorContainer = "/server/luminosity_0/data";
 var actuatorContainer = "/server/lamp_0/data";
@@ -16,7 +17,9 @@ var app = express();
 
 app.use(bodyParser.json());
 app.listen(aePort, function () {
-	console.log("AE Monitor listening on: "+aeIp+":"+aePort);
+// jayden.choe	
+	console.log("Recycling Service AE Monitor listening on: "+aeIp+":"+aePort);
+///////////////////////////
 });
 
 var ledON = 0;
@@ -25,6 +28,17 @@ app.post('/', function (req, res) {
 	console.log(req.body);
 
 	var content = req.body["m2m:sgn"].nev.rep["m2m:cin"].con;
+
+// jayden.choe		
+	console.log("Receieved Detected Type of the recycling product: "+content);
+
+////////////////////////////
+
+
+
+
+
+/*
 	console.log("Receieved luminosity: "+content);
 	if(content>300 && ledON==1 ){
 		console.log("High luminosity => Switch lamp to 0");
@@ -37,10 +51,13 @@ app.post('/', function (req, res) {
 	}else{
 		console.log("Nothing to do");
 	}
+*/
+
 	res.sendStatus(200);	
 });
 
 createAE();
+
 function createAE(){
 	console.log("\n[REQUEST]");
 	var method = "POST";
@@ -117,7 +134,7 @@ function resetAE(){
 function createSubscription(){
 	console.log("\n[REQUEST]");
 	var method = "POST";
-	var uri= cseUri+sensorContainer;
+	var uri= cseUri+sensorContainer; // subscription to luminosity_0 to get the notification
 	var resourceType=23;
 	var requestId = Math.floor(Math.random() * 10000);
 	var representation = {
