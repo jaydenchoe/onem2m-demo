@@ -235,9 +235,24 @@ function led_off() {
 	ledOut.writeSync(0);
 }
 
-function servo_on() {
+async function servo_on() {
 	var Piservo = require('pi-servo');
     var sv1 = new Piservo(18);
 	sv1.open();
-	sv1.setDegree(20);
+	sv1.setDegree(0);
+	await sleep(600);
+	sv1.setDegree(180);
+	await sleep(600);
+	sv1.setDegree(360);
+	sv1.setDegree(0);
+	await sleep(600);
+	sv1.setDegree(180);
+	await sleep(600);
+	sv1.setDegree(360);
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }
